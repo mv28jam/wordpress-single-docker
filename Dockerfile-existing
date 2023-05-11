@@ -1,7 +1,6 @@
 FROM ubuntu:jammy
 
-#secret env
-ENV MARIADB_USER=wordpress
+#dif env
 ENV MARIADB_PASS=password
 ENV MARIADB_ROOT_PASS=rootpassword
 ENV DOMAINS='example.com www.example.com example.dev'
@@ -12,6 +11,7 @@ ENV WP_HASH='wp-secret-config-hash'
 ENV TZ=UTC
 ENV PHP_LIMIT=128M
 ENV MARIADB_DB=wordpress_db
+ENV MARIADB_USER=wordpress
 
 #ini
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -34,7 +34,7 @@ RUN sed -i "s/post_max_size = 8M/post_max_size = $PHP_LIMIT/g" /etc/php/8.1/fpm/
 #db
 RUN apt install mariadb-server -y
 RUN apt install mariadb-client -y
-ADD sh/db_init_existing.sh /root/db_init.sh
+ADD internal_sh/db_init_existing.sh /root/db_init.sh
 COPY data/dump.sql dump.sql
 RUN chmod 775 /root/db_init.sh
 RUN /root/db_init.sh
@@ -65,7 +65,7 @@ RUN sed -i "s/put your unique phrase here/"$WP_HASH"/g" /var/www/wordpress/wp-co
 RUN cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
 
 # run cmd add
-ADD sh/run.sh /root/run.sh
+ADD internal_sh/run.sh /root/run.sh
 RUN chmod 775 /root/run.sh
 RUN sed -i "s/CERTBOT_DOMAIN/$CERTBOT_DOMAIN/g" /root/run.sh
 RUN sed -i "s/CERTBOT_MAIL/$CERTBOT_MAIL/g" /root/run.sh
