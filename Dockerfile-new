@@ -1,0 +1,64 @@
+FROM ubuntu:jammy
+
+#env
+ENV TZ=UTC
+ENV PHP_LIMIT=512M
+ENV MARIADB_DB=wordpress_db
+ENV MARIADB_USER=wordpress
+#secret env
+ENV MARIADB_PASS=12345
+ENV MARIADB_ROOT_PASS=vertrigo
+ENV DOMAINS='socialist-jam.ru www.socialist-jam.ru socialist-jam.lc'
+
+#ini
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt update
+
+#php
+RUN apt install apt-utils -y
+RUN apt install php8.1-curl  -y
+RUN apt install php8.1-gd  -y
+RUN apt install php8.1-intl  -y
+RUN apt install php8.1-mbstring  -y
+RUN apt install php8.1-soap  -y
+RUN apt install php8.1-xml  -y
+RUN apt install php8.1-xmlrpc  -y
+RUN apt install php8.1-zip -y
+RUN apt install php8.1-fpm -y
+RUN apt install php8.1-mysql -y
+RUN sed -i "s/upload_max_filesize = 2M/upload_max_filesize = $PHP_LIMIT/g" /etc/php/8.1/fpm/php.ini
+RUN sed -i "s/post_max_size = 8M/post_max_size = $PHP_LIMIT/g" /etc/php/8.1/fpm/php.ini
+
+#db
+RUN apt install mariadb-server -y
+RUN apt install mariadb-client -y
+ADD db_init_new.sh /root/db_init.sh
+RUN chmod 775 /root/db_init.sh
+RUN /root/db_init.sh
+
+#nginx
+RUN apt install nginx -y
+COPY nginx-conf/site.conf /etc/nginx/sites-enabled/site.conf
+RUN sed -i "s/DOMAINS/$DOMAINS/g" /etc/nginx/sites-enabled/site.conf
+RUN sed -i "s/PHP_LIMIT/$PHP_LIMIT/g" /etc/nginx/sites-enabled/site.conf
+RUN nginx -t
+
+#certbot
+RUN apt install certbot -y
+
+#wordpress
+RUN apt install wget -y
+RUN apt install unzip -y
+RUN apt install mc -y
+RUN mkdir /var/www/wordpress
+RUN wget https://wordpress.org/latest.zip
+RUN unzip latest.zip -d /var/www/
+RUN chown -R www-data:www-data /var/www/wordpress/
+RUN find /var/www/wordpress -type d -exec chmod 755 {} \;
+RUN find /var/www/wordpress -type f -exec chmod 644 {} \;
+RUN rm latest.zip
+
+# run cmd add
+ADD run.sh /root/run.sh
+RUN chmod 775 /root/run.sh
+CMD ["/root/run.sh"]
