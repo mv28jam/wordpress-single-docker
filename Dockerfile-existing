@@ -1,22 +1,23 @@
 FROM ubuntu:jammy
 
-#env
-ENV TZ=UTC
-ENV PHP_LIMIT=512M
-ENV MARIADB_DB=wordpress_db
 #secret env
 ENV MARIADB_USER=wordpress
-ENV MARIADB_PASS=12345
-ENV MARIADB_ROOT_PASS=vertrigo
-ENV DOMAINS='socialist-jam.ru www.socialist-jam.ru socialist-jam.lc'
-ENV HASH='R97z+uBoeSMMOosx0llBIcnVKMDCenwyEtNvpXa+403k0zgqXLe3LA=='
+ENV MARIADB_PASS=password
+ENV MARIADB_ROOT_PASS=rootpassword
+ENV DOMAINS='example.com www.example.com example.dev'
+ENV CERTBOT_MAIL=user@example.com
+ENV CERTBOT_DOMAIN=example.com
+ENV WP_HASH='wp-secret-config-hash'
+#env
+ENV TZ=UTC
+ENV PHP_LIMIT=128M
+ENV MARIADB_DB=wordpress_db
 
 #ini
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt update
 
 #php
-RUN apt install apt-utils -y
 RUN apt install php8.1-curl  -y
 RUN apt install php8.1-gd  -y
 RUN apt install php8.1-intl  -y
@@ -33,7 +34,7 @@ RUN sed -i "s/post_max_size = 8M/post_max_size = $PHP_LIMIT/g" /etc/php/8.1/fpm/
 #db
 RUN apt install mariadb-server -y
 RUN apt install mariadb-client -y
-ADD db_init_existing.sh /root/db_init.sh
+ADD sh/db_init_existing.sh /root/db_init.sh
 COPY data/dump.sql dump.sql
 RUN chmod 775 /root/db_init.sh
 RUN /root/db_init.sh
@@ -47,7 +48,7 @@ RUN sed -i "s/PHP_LIMIT/$PHP_LIMIT/g" /etc/nginx/sites-enabled/site.conf
 RUN nginx -t
 
 #certbot
-RUN apt install certbot -y
+RUN apt install certbot python3-certbot-nginx -y
 
 #wordpress
 RUN apt install unzip
@@ -60,12 +61,12 @@ RUN rm wordpress.zip
 RUN sed -i "s/database_name_here/$MARIADB_DB/g" /var/www/wordpress/wp-config-sample.php
 RUN sed -i "s/username_here/$MARIADB_USER/g" /var/www/wordpress/wp-config-sample.php
 RUN sed -i "s/password_here/$MARIADB_PASS/g" /var/www/wordpress/wp-config-sample.php
-RUN sed -i "s/put your unique phrase here/"$HASH"/g" /var/www/wordpress/wp-config-sample.php
+RUN sed -i "s/put your unique phrase here/"$WP_HASH"/g" /var/www/wordpress/wp-config-sample.php
 RUN cp /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php
 
-RUN apt install mc -y
-
 # run cmd add
-ADD run.sh /root/run.sh
+ADD sh/run.sh /root/run.sh
 RUN chmod 775 /root/run.sh
+RUN sed -i "s/CERTBOT_DOMAIN/$CERTBOT_DOMAIN/g" /root/run.sh
+RUN sed -i "s/CERTBOT_MAIL/$CERTBOT_MAIL/g" /root/run.sh
 CMD ["/root/run.sh"]
