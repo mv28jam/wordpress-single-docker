@@ -1,12 +1,13 @@
 FROM ubuntu:jammy
 
-#dif env
+###dif env
 ENV MARIADB_PASS=password
 ENV MARIADB_ROOT_PASS=rootpassword
 ENV DOMAINS='example.com www.example.com example.dev'
 ENV CERTBOT_MAIL=user@example.com
 ENV CERTBOT_DOMAIN=example.com
-#env
+
+###env
 ENV TZ=UTC
 ENV PHP_LIMIT=128M
 ENV MARIADB_DB=wordpress_db

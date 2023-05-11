@@ -1,5 +1,65 @@
-# wordpress-single-docker
-Wordpress single Docker php8.1+fpm+nginx+MariaDB, create new or migrate old.  
+# Wordpress single Docker. 
 
-sudo docker build -f Dockerfile-existing . -t wp-cont  
-sudo docker run -p 80:80 -p 443:443 -d -it wp-cont
+Wordpress single Docker. Creates docker with Wordpress site and automatically install ssl certificate with Certbot. Migrate Wordpress site to docker, restore content from dumps and automatically install ssl certificate with Certbot.  
+
+#### Contains:
+- Wordpress latest (or ver from dump)
+- nginx
+- php8.1
+- php8.1-fpm
+- MariaDB 
+- Certbot
+- ubuntu:jammy version
+
+## Create new Wordpress site.
+1. Install Docker
+2. Clone code
+3. Set environment to "dif env" of Dockerfile-new to create site with your credentials
+4. Run code  
+<code>
+$chmod 775 ./sh/build_new.sh<br>
+$sudo ./sh/build_new.sh
+</code>
+5. Go to your site domain in process Wordpress installation
+
+## Migrate or restore existing Wordpress site.
+1. Install Docker
+2. Clone code
+3. Dump your database in dump.slq file  
+   <code>mysqldump <your_database> > dump.sql</code>  
+    If you use not standard WP table prefix 'wp_', replace it with default.   
+    For example  
+   <code>sed -i "s/\`<custom_prefix>\_/\`wp\_/g" dump.sql</code>
+4. Dump your site dir  
+   <code>zip -r wordpress.zip <your_wordpress_dir> </code>
+5. Copy wordpress.zip and dump.sql to ./data/
+6. Set environment to "dif env" of Dockerfile-existing to create site with your credentials. Database credentials can differ from original - it's OK.
+7. Run code  
+   <code>
+   $chmod 775 ./sh/build_new.sh<br>
+   $sudo ./sh/build_new.sh
+   </code>
+8. Go to your site domain and check workability
+
+## ENV description
+1. Database password for Wordpress user  
+   <code>ENV MARIADB_PASS=password</code>
+2. Database root password   
+   <code>ENV MARIADB_ROOT_PASS=rootpassword</code>
+3. Domains to listen by nginx.Add developer domain in list to test locally.  
+   <code>ENV DOMAINS='example.com www.example.com example.dev'</code>
+4. Certbot mail to get certificate and manage it.  
+   <code>ENV CERTBOT_MAIL=user@example.com </code>
+5. Domain to get ssl certificate by Certbot. Domain WITHOUT(!) www. / www.example.com will add automatically  
+   <code>ENV CERTBOT_DOMAIN=example.com</code>
+6. Time zone for system  
+   <code>ENV TZ=UTC</code>
+7. Nginx and php.ini post/file memory limit  
+   <code>ENV PHP_LIMIT=128M</code>
+8. Database name.  
+   <code>ENV MARIADB_DB=wordpress_db</code>
+9. Database user.  
+   <code>ENV MARIADB_USER=wordpress</code>
+
+## DEV
+When run with dev unreachable domains Certbot will silent fall with error. 443 will not work. Nginx conf will not change.
