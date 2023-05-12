@@ -37,6 +37,8 @@ $sudo ./sh/build_new.sh</code>
 $sudo ./sh/build_new.sh</code>
 8. Go to your site domain and check workability
 
+Do NOT support migration from php7.* - Wordpress will not start. Run Docker for new site, and use one of internal WP migration tools in new site administration panel. 
+
 ## ENV description
 1. Database password for Wordpress user  
    <code>ENV MARIADB_PASS=password</code>
