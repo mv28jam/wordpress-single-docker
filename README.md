@@ -60,4 +60,9 @@ Do NOT support migration from php7.* - Wordpress will not start. Run Docker for 
    <code>ENV MARIADB_USER=wordpress</code>
 
 ## DEV
+### dev domains
 When run with dev unreachable domains Certbot will silent fall with error. 443 will not work. Nginx conf will not change.
+
+### run with without sh
+docker build -f Dockerfile-existing . -t wp-cont
+docker run --memory=256m --cpus=".5" -p 80:80 -p 443:443 -d -it wp-cont 
