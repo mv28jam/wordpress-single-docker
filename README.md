@@ -18,7 +18,7 @@ Wordpress single Docker. Creates docker with Wordpress site and automatically in
 4. Run code  
 <code>$chmod 775 ./sh/build_new.sh  
 $sudo ./sh/build_new.sh</code>
-5. Go to your site domain in process Wordpress installation
+5. Go to your site domain to process Wordpress installation
 
 ## Migrate or restore existing Wordpress site.
 1. Install Docker
