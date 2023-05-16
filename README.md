@@ -24,10 +24,7 @@ Wordpress single Docker. Creates docker with Wordpress site and automatically in
 1. Install Docker
 2. Clone code
 3. Dump your database in dump.slq file  
-   <code>mysqldump <your_database> > dump.sql</code>  
-    If you use not standard WP table prefix 'wp_', replace it with default.   
-    For example  
-   <code>sed -i "s/\`<custom_prefix>\_/\`wp\_/g" dump.sql</code>
+   <code>mysqldump <your_database> > dump.sql</code>
 4. Dump your site dir  
    <code>zip -r wordpress.zip <your_wordpress_dir> </code>
 5. Copy wordpress.zip and dump.sql to ./data/
@@ -58,6 +55,8 @@ Do NOT support migration from php7.* - Wordpress will not start. Run Docker for 
    <code>ENV MARIADB_USER=wordpress</code>
 9. Wordpress hash.  
    <code>ENV WP_HASH='hash'</code>
+10. Wordpress table prefix.  
+<code>ENV WP_PREFIX='wp_'</code>
 
 ## DEV
 ### dev domains
