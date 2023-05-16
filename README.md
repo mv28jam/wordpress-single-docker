@@ -16,9 +16,9 @@ Wordpress single Docker. Creates docker with Wordpress site and automatically in
 2. Clone code
 3. Set environment to "dif env" of Dockerfile-new to create site with your credentials
 4. Run code  
-<code>$chmod 775 ./sh/build_new.sh  
-$sudo ./sh/build_new.sh</code>
-5. Go to your site domain in process Wordpress installation
+<code>$chmod 775 ./sh/build_new.sh</code>  
+<code>$sudo ./sh/build_new.sh</code>
+5. Go to your site domain to process Wordpress installation
 
 ## Migrate or restore existing Wordpress site.
 1. Install Docker
@@ -33,8 +33,8 @@ $sudo ./sh/build_new.sh</code>
 5. Copy wordpress.zip and dump.sql to ./data/
 6. Set environment to "dif env" of Dockerfile-existing to create site with your credentials. Database credentials can differ from original - it's OK.
 7. Run code  
-   <code>$chmod 775 ./sh/build_new.sh  
-$sudo ./sh/build_new.sh</code>
+   <code>$chmod 775 ./sh/build_new.sh</code>  
+<code>$sudo ./sh/build_new.sh</code>
 8. Go to your site domain and check workability
 
 Do NOT support migration from php7.* - Wordpress will not start. Run Docker for new WP, and use one of internal WP migration tools in new docker WP site administration panel. 
