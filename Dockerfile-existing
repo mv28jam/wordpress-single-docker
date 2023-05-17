@@ -1,11 +1,11 @@
 FROM ubuntu:jammy
 
 ###dif env
-ENV MARIADB_PASS=reuGhahchiethaem2zai9mojainaewai
-ENV DOMAINS='socialist-jam.ru www.socialist-jam.ru socialist-jam.lc'
-ENV CERTBOT_MAIL=mv28jam@gmail.com
-ENV CERTBOT_DOMAIN=socialist-jam.ru
-ENV WP_HASH='R97z+uBoeSMMOosx0llBIcnVKMDCenwyEtNvpXa+403k0zgqXLe344=='
+ENV MARIADB_PASS=password
+ENV DOMAINS='example.com www.example.com example.dev'
+ENV CERTBOT_MAIL=user@example.com
+ENV CERTBOT_DOMAIN=example.com
+ENV WP_HASH='hash'
 ENV WP_PREFIX='wp_'
 
 ###env
