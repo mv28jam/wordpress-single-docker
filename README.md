@@ -1,6 +1,8 @@
 # Wordpress single Docker. 
 
 Wordpress single Docker. Creates docker with Wordpress site and automatically install ssl certificate with Certbot. Migrate Wordpress site to docker, restore content from dumps and automatically install ssl certificate with Certbot.  
+  
+One container for simple create or move WP site, use for low rps projects. For high load projects use Docker compose solutions with separate dockers official images. 
 
 #### Contains:
 - Wordpress latest (or ver from dump)
