@@ -32,8 +32,8 @@ One container for simple create or move WP site, use for low rps projects. For h
 5. Copy wordpress.zip and dump.sql to ./data/
 6. Set environment to "dif env" of Dockerfile-existing to create site with your credentials. Database credentials can differ from original - it's OK.
 7. Run code  
-   <code>$chmod 775 ./sh/build_new.sh</code>  
-<code>$sudo ./sh/build_new.sh</code>
+   <code>$chmod 775 ./sh/build_exi.sh</code>  
+<code>$sudo ./sh/build_exi.sh</code>
 8. Go to your site domain and check workability
 
 Do NOT support migration from php7.* - Wordpress will not start. Run Docker for new WP, and use one of internal WP migration tools in new docker WP site administration panel. 
