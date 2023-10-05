@@ -67,3 +67,6 @@ When run with dev unreachable domains Certbot will silent fall with error. 443 w
 ### run with without sh
 docker build -f Dockerfile-existing . -t wp-cont  
 docker run --memory=256m --cpus=".5" -p 80:80 -p 443:443 -d -it wp-cont 
+
+### TODO  
+add cron to renew sert
